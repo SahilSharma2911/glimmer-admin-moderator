@@ -5,11 +5,21 @@
   --foreground: #171717;
 }
 
+@theme {
+  --font-hanken-grotesk: var(--font-hanken-grotesk);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand: #6a45e6;
+  --color-brand-dark: #5a38c7;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+@theme {
+  --font-hanken: var(--font-hanken-grotesk);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +32,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
