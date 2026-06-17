@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { hankenGrotesk } from "@/lib/fonts";
+import { QueryProvider } from "@/lib/query/QueryProvider";
+import { UserHydrator } from "@/providers/UserHydrator";
+import { Toaster } from "@/components/ui/Toaster";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,7 +31,13 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${hankenGrotesk.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <QueryProvider>
+          <UserHydrator />
+          {children}
+        </QueryProvider>
+        <Toaster />
+      </body>
     </html>
   );
 }
