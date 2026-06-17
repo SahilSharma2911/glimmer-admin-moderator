@@ -72,6 +72,15 @@ export function ShieldIcon(props: IconProps) {
   );
 }
 
+export function CheckCircleIcon(props: IconProps) {
+  return (
+    <svg {...base(props)} stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="m8.5 12.2 2.3 2.3 4.7-4.9" />
+    </svg>
+  );
+}
+
 export function GoogleIcon({ size = 18, ...props }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
