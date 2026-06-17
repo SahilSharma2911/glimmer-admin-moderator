@@ -1,6 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "@/store/user.store";
-import { tokenStore } from "@/lib/api/token";
+import { clearSession } from "@/lib/auth/session";
 
 /**
  * Global accessor for the current admin — usable from ANY feature.
@@ -10,16 +9,7 @@ import { tokenStore } from "@/lib/api/token";
  *   const { name, role, isAdmin } = useCurrentUser();
  */
 export function useCurrentUser() {
-  const queryClient = useQueryClient();
   const user = useUserStore((s) => s.user);
-  const clearUser = useUserStore((s) => s.clearUser);
-
-  /** Stateless JWT → logout is client-side: drop token, store, and cache. */
-  const logout = () => {
-    tokenStore.clear();
-    clearUser();
-    queryClient.clear();
-  };
 
   return {
     user,
@@ -29,6 +19,7 @@ export function useCurrentUser() {
     isAuthenticated: Boolean(user),
     isAdmin: user?.role === "ADMIN",
     isModerator: user?.role === "MODERATOR",
-    logout,
+    /** Manual logout: full client-side teardown (token, store, cache). */
+    logout: clearSession,
   };
 }

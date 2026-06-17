@@ -4,6 +4,7 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from "axios";
 import { tokenStore } from "./token";
+import { forceLogout } from "@/lib/auth/session";
 import { ApiError, type ApiErrorBody, type ApiSuccess } from "./types";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -23,14 +24,17 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
-// Normalize all failures into ApiError; drop the token on 401.
+// Normalize all failures into ApiError. A 401 on an *authenticated* request
+// (a token was present) means the session expired/was revoked → tear down all
+// session state and redirect to /login. 401s without a token (e.g. wrong
+// login credentials, bad OTP) fall through to the caller's normal handling.
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiErrorBody>) => {
     if (error.response) {
       const { status, data } = error.response;
-      if (status === 401) {
-        tokenStore.clear();
+      if (status === 401 && tokenStore.get()) {
+        forceLogout();
       }
       return Promise.reject(
         new ApiError(data?.error ?? "REQUEST_FAILED", status, data?.message),

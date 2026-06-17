@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -49,6 +49,14 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
     mode: "onTouched",
   });
+
+  // Surface a forced logout (?session=expired set by the API interceptor).
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("session") === "expired") {
+      toast.error("Your session expired. Please sign in again.");
+      window.history.replaceState(null, "", "/login");
+    }
+  }, []);
 
   const onSubmit = (values: LoginFormValues) => {
     login.mutate(values, {
