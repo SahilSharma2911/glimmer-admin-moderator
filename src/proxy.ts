@@ -13,6 +13,12 @@ import { roleHomePath } from "@/features/auth/roles";
  *
  * Only checks cookie presence/value, not JWT validity — real authorization is
  * enforced by the backend (a stale token gets a 401, which the client clears).
+ *
+ * NOTE: the role cookie is user-editable, so this gate is optimistic only. Its
+ * client-side counterpart is `RoleGuard` (wrapping the /admin and /moderator
+ * layouts), which confirms the real role via `/me`, redirects on mismatch, and
+ * rewrites the cookie to the truth. Neither is the security boundary — that's
+ * the backend.
  */
 
 const TOKEN_COOKIE = "glimmers_admin_token";
