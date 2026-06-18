@@ -1,25 +1,29 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import type { AdminRole } from "@/features/auth/types/auth.types";
+import { roleHomePath } from "@/features/auth/roles";
 
 /**
  * Route guard (Next.js 16 Proxy, formerly Middleware).
  *
- * Optimistic auth gate based on the presence of the admin token cookie:
- *   - No token + protected route  → redirect to /login
- *   - Has token + auth route      → redirect to /dashboard
+ * Optimistic auth + role gate based on cookies:
+ *   - No token + protected route   → /login
+ *   - Has token + auth route       → role home (/admin or /moderator)
+ *   - Wrong role for /admin|/moderator → redirect to own role home
  *
- * This only checks that the cookie EXISTS, not that the JWT is valid — real
- * authorization is enforced by the backend (a stale token still gets a 401,
- * which the client clears). Per the Next docs, Proxy is for optimistic
- * checks like this, not full session management.
+ * Only checks cookie presence/value, not JWT validity — real authorization is
+ * enforced by the backend (a stale token gets a 401, which the client clears).
+ *
+ * NOTE: the role cookie is user-editable, so this gate is optimistic only. Its
+ * client-side counterpart is `RoleGuard` (wrapping the /admin and /moderator
+ * layouts), which confirms the real role via `/me`, redirects on mismatch, and
+ * rewrites the cookie to the truth. Neither is the security boundary — that's
+ * the backend.
  */
 
 const TOKEN_COOKIE = "glimmers_admin_token";
-
-/** Public routes for unauthenticated users (login / account recovery). */
+const ROLE_COOKIE = "glimmers_admin_role";
 const AUTH_ROUTES = ["/login", "/onboard", "/forgot-password"];
-
-const REDIRECT_WHEN_AUTHED = "/dashboard";
 const REDIRECT_WHEN_GUEST = "/login";
 
 function isAuthRoute(pathname: string): boolean {
@@ -28,38 +32,48 @@ function isAuthRoute(pathname: string): boolean {
   );
 }
 
+function redirectTo(request: NextRequest, pathname: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = pathname;
+  url.search = "";
+  return NextResponse.redirect(url);
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hasToken = Boolean(request.cookies.get(TOKEN_COOKIE)?.value);
+  const role = request.cookies.get(ROLE_COOKIE)?.value as AdminRole | undefined;
+  const home = roleHomePath(role);
 
-  // Root: send to the right place based on auth.
+  // Root → role home or login.
   if (pathname === "/") {
-    const url = request.nextUrl.clone();
-    url.pathname = hasToken ? REDIRECT_WHEN_AUTHED : REDIRECT_WHEN_GUEST;
-    return NextResponse.redirect(url);
+    return redirectTo(request, hasToken ? home : REDIRECT_WHEN_GUEST);
   }
 
   const authRoute = isAuthRoute(pathname);
 
-  // Unauthenticated user on a protected route → login.
+  // Unauthenticated on a protected route → login.
   if (!hasToken && !authRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = REDIRECT_WHEN_GUEST;
-    return NextResponse.redirect(url);
+    return redirectTo(request, REDIRECT_WHEN_GUEST);
   }
 
-  // Authenticated user on an auth route → dashboard.
+  // Authenticated on an auth route → role home.
   if (hasToken && authRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = REDIRECT_WHEN_AUTHED;
-    return NextResponse.redirect(url);
+    return redirectTo(request, home);
+  }
+
+  // Role enforcement: can't enter the other role's area.
+  if (hasToken && pathname.startsWith("/admin") && role !== "ADMIN") {
+    return redirectTo(request, home);
+  }
+  if (hasToken && pathname.startsWith("/moderator") && role !== "MODERATOR") {
+    return redirectTo(request, home);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  // Run on all routes except Next internals, API, and static asset files.
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|images|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { hankenGrotesk } from "@/lib/fonts";
 import { QueryProvider } from "@/lib/query/QueryProvider";
 import { UserHydrator } from "@/providers/UserHydrator";
@@ -32,10 +33,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${hankenGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <QueryProvider>
-          <UserHydrator />
-          {children}
-        </QueryProvider>
+        <NuqsAdapter>
+          <QueryProvider>
+            <UserHydrator />
+            {children}
+          </QueryProvider>
+        </NuqsAdapter>
         <Toaster />
       </body>
     </html>
