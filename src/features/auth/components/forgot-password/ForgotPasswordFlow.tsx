@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { CheckCircleIcon } from "@/lib/icons";
 import { RequestResetForm } from "./RequestResetForm";
 import { VerifyOtpForm } from "./VerifyOtpForm";
@@ -67,7 +67,7 @@ export function ForgotPasswordFlow() {
       </p>
       <div className="mt-6">
         <Link href="/login">
-          <Button variant="primary">Back to login</Button>
+          <Button variant="brand" className="h-11 w-full">Back to login</Button>
         </Link>
       </div>
     </div>

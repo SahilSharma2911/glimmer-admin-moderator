@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useLogin } from "@/features/auth/hooks/useLogin";
+import { roleHomePath } from "@/features/auth/roles";
 import {
   loginSchema,
   type LoginFormValues,
@@ -60,7 +61,7 @@ export function LoginForm() {
 
   const onSubmit = (values: LoginFormValues) => {
     login.mutate(values, {
-      onSuccess: () => router.replace("/dashboard"),
+      onSuccess: (data) => router.replace(roleHomePath(data.role)),
       onError: (error) =>
         toast.error(loginErrorMessage(error) ?? "Something went wrong."),
     });
@@ -109,7 +110,7 @@ export function LoginForm() {
             </label>
             <Link
               href="/forgot-password"
-              className="text-sm font-medium text-brand hover:text-brand-dark"
+              className="text-sm font-medium text-accent hover:text-accent-dark"
             >
               Forgot password?
             </Link>
@@ -141,17 +142,18 @@ export function LoginForm() {
 
         <Button
           type="submit"
-          variant="primary"
-          leftIcon={<LockIcon size={16} />}
+          variant="brand"
+          className="h-11 w-full"
           disabled={login.isPending}
         >
+          <LockIcon size={16} />
           {login.isPending ? "Signing in…" : "Sign in"}
         </Button>
       </form>
 
       {/* authorized-use note */}
-      <div className="mt-8 flex items-start gap-2.5 rounded-lg bg-[#F4F1FE] px-4 py-3">
-        <ShieldIcon size={18} className="mt-0.5 shrink-0 text-brand" />
+      <div className="mt-8 flex items-start gap-2.5 rounded-lg bg-accent-soft px-4 py-3">
+        <ShieldIcon size={18} className="mt-0.5 shrink-0 text-accent" />
         <p className="text-xs leading-relaxed text-slate-500">
           This platform is for authorized team members only. All activity is
           monitored to keep children safe.

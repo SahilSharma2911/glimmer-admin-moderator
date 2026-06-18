@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
 import {
   resetPasswordSchema,
@@ -125,7 +125,7 @@ export function SetNewPasswordForm({
           ) : null}
         </div>
 
-        <Button type="submit" variant="primary" disabled={reset.isPending}>
+        <Button type="submit" variant="brand" className="h-11 w-full" disabled={reset.isPending}>
           {reset.isPending ? "Resetting…" : "Reset password"}
         </Button>
       </form>
