@@ -1,13 +1,14 @@
-import { tokenStore } from "@/lib/api/token";
+import { tokenStore, roleStore } from "@/lib/api/token";
 import { getQueryClient } from "@/lib/query/query-client";
 import { useUserStore } from "@/store/user.store";
 
 /**
- * Tears down all client-side session state: token cookie, the global user
- * store, and the React Query cache. Safe to call outside React.
+ * Tears down all client-side session state: token + role cookies, the global
+ * user store, and the React Query cache. Safe to call outside React.
  */
 export function clearSession(): void {
   tokenStore.clear();
+  roleStore.clear();
   useUserStore.getState().clearUser();
   getQueryClient().clear();
 }

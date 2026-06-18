@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "../api/auth.api";
-import { tokenStore } from "@/lib/api/token";
+import { tokenStore, roleStore } from "@/lib/api/token";
 import { useUserStore } from "@/store/user.store";
 import type { ApiError } from "@/lib/api/types";
 import type { AuthResult, OnboardRequest } from "../types/auth.types";
@@ -18,6 +18,7 @@ export function useOnboard() {
     mutationFn: authApi.onboard,
     onSuccess: async (data) => {
       tokenStore.set(data.adminToken);
+      roleStore.set(data.role);
       const profile = await queryClient.fetchQuery({
         queryKey: authKeys.me,
         queryFn: authApi.me,

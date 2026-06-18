@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
 import {
   requestResetSchema,
@@ -82,14 +82,14 @@ export function RequestResetForm({
           ) : null}
         </div>
 
-        <Button type="submit" variant="primary" disabled={forgot.isPending}>
+        <Button type="submit" variant="brand" className="h-11 w-full" disabled={forgot.isPending}>
           {forgot.isPending ? "Sending…" : "Send code"}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-500">
         Remembered it?{" "}
-        <Link href="/login" className="font-medium text-brand hover:text-brand-dark">
+        <Link href="/login" className="font-medium text-accent hover:text-accent-dark">
           Back to login
         </Link>
       </p>

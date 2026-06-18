@@ -3,8 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useVerifyOtp } from "@/features/auth/hooks/useVerifyOtp";
 import {
   verifyOtpSchema,
@@ -90,7 +90,7 @@ export function VerifyOtpForm({
           ) : null}
         </div>
 
-        <Button type="submit" variant="primary" disabled={verify.isPending}>
+        <Button type="submit" variant="brand" className="h-11 w-full" disabled={verify.isPending}>
           {verify.isPending ? "Verifying…" : "Verify code"}
         </Button>
       </form>
@@ -100,7 +100,7 @@ export function VerifyOtpForm({
         <button
           type="button"
           onClick={onBack}
-          className="font-medium text-brand hover:text-brand-dark"
+          className="font-medium text-accent hover:text-accent-dark"
         >
           Start over
         </button>
