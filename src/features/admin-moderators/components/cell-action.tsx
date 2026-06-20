@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { MoreHorizontal } from "lucide-react";
+import { Ban, Eye, Mail, MoreHorizontal, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -49,6 +49,7 @@ export function CellAction({ data }: { data: Moderator }) {
             className={ITEM_HOVER}
             onClick={() => router.push(`/admin/moderators/${data.id}`)}
           >
+            <Eye />
             View details
           </DropdownMenuItem>
           {data.status === "PENDING" && (
@@ -57,6 +58,7 @@ export function CellAction({ data }: { data: Moderator }) {
               onClick={onResend}
               disabled={isResending}
             >
+              <Mail />
               {isResending ? "Sending…" : "Resend invite"}
             </DropdownMenuItem>
           )}
@@ -65,6 +67,7 @@ export function CellAction({ data }: { data: Moderator }) {
               onClick={() => setConfirm("SUSPENDED")}
               variant="destructive"
             >
+              <Ban />
               Suspend
             </DropdownMenuItem>
           )}
@@ -73,6 +76,7 @@ export function CellAction({ data }: { data: Moderator }) {
               className={ITEM_HOVER}
               onClick={() => setConfirm("ACTIVE")}
             >
+              <UserCheck />
               Reactivate
             </DropdownMenuItem>
           )}
