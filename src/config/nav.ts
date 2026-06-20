@@ -22,6 +22,5 @@ export const ADMIN_NAV: NavItem[] = [
 export const MODERATOR_NAV: NavItem[] = [
   { label: "Overview", href: "/moderator", icon: GridIcon, exact: true },
   { label: "My Cases", href: "/moderator/cases", icon: FolderIcon },
-  { label: "Global Light Ritual", href: "/moderator/global-light-ritual", icon: SparkleIcon },
   { label: "Settings", href: "/moderator/settings", icon: SettingsIcon },
 ];
