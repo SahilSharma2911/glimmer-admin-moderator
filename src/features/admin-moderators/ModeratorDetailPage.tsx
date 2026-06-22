@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/format";
+import { Ban, UserCheck } from "lucide-react";
 import { AlertTriangleIcon, MailIcon } from "@/lib/icons";
 import { useModerator } from "./hooks/useModerator";
 import { ModeratorStatusBadge } from "./components/ModeratorStatusBadge";
@@ -50,11 +51,13 @@ function ModeratorActions({ moderator }: { moderator: Moderator }) {
             className="border-rose-200 text-rose-600 hover:bg-rose-50"
             onClick={() => setConfirm("SUSPENDED")}
           >
+            <Ban size={16} />
             Suspend
           </Button>
         )}
         {moderator.status === "SUSPENDED" && (
           <Button variant="brand" onClick={() => setConfirm("ACTIVE")}>
+            <UserCheck size={16} />
             Reactivate
           </Button>
         )}

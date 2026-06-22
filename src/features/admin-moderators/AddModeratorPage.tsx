@@ -45,6 +45,15 @@ export function AddModeratorPage() {
 
   return (
     <div className="space-y-6">
+      <div>
+        <Link
+          href="/admin/moderators"
+          className="text-sm font-medium text-accent hover:underline"
+        >
+          ← Back to moderators
+        </Link>
+      </div>
+
       <header>
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
           Add moderator
