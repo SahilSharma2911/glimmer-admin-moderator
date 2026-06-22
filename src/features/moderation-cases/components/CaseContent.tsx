@@ -79,6 +79,34 @@ function MediaLinks({ urls }: { urls: string[] }) {
   );
 }
 
+// The media leaves below render `null` when empty, but `Row` only sees the
+// (always-truthy) element and would still show a dangling label. These wrappers
+// guard on the underlying value so absent fields drop the whole row, matching
+// how the Grid's `str()`/`num()` rows hide.
+function TextRow({ label, value }: { label: string; value: string | null }) {
+  return value ? <Row label={label} value={<LongText value={value} />} /> : null;
+}
+
+function AudioRow({ label, url }: { label: string; url: string | null }) {
+  return url ? <Row label={label} value={<Audio url={url} />} /> : null;
+}
+
+function ImageRow({
+  label,
+  url,
+  alt,
+}: {
+  label: string;
+  url: string | null;
+  alt: string;
+}) {
+  return url ? <Row label={label} value={<ImageMedia url={url} alt={alt} />} /> : null;
+}
+
+function MediaRow({ label, urls }: { label: string; urls: string[] }) {
+  return urls.length ? <Row label={label} value={<MediaLinks urls={urls} />} /> : null;
+}
+
 function Grid({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -109,17 +137,11 @@ function CapsuleContent({ c }: { c: Content }) {
           value={str(c, "createdAt") ? formatDate(str(c, "createdAt")) : null}
         />
       </Grid>
-      <Row label="Text content" value={<LongText value={str(c, "textContent")} />} />
-      <Row
-        label="Prompt response"
-        value={<LongText value={str(c, "promptResponse")} />}
-      />
-      <Row label="Audio" value={<Audio url={str(c, "audioUrl")} />} />
-      <Row
-        label="Doodle"
-        value={<ImageMedia url={str(c, "doodleUrl")} alt="Capsule doodle" />}
-      />
-      <Row label="Media" value={<MediaLinks urls={mediaUrlList(c)} />} />
+      <TextRow label="Text content" value={str(c, "textContent")} />
+      <TextRow label="Prompt response" value={str(c, "promptResponse")} />
+      <AudioRow label="Audio" url={str(c, "audioUrl")} />
+      <ImageRow label="Doodle" url={str(c, "doodleUrl")} alt="Capsule doodle" />
+      <MediaRow label="Media" urls={mediaUrlList(c)} />
     </div>
   );
 }
@@ -141,13 +163,10 @@ function JournalContent({ c }: { c: Content }) {
           value={str(c, "createdAt") ? formatDate(str(c, "createdAt")) : null}
         />
       </Grid>
-      <Row label="Prompt" value={<LongText value={str(c, "promptText")} />} />
-      <Row label="Reflection" value={<LongText value={str(c, "textContent")} />} />
-      <Row label="Audio" value={<Audio url={str(c, "audioUrl")} />} />
-      <Row
-        label="Drawing"
-        value={<ImageMedia url={str(c, "drawingUrl")} alt="Journal drawing" />}
-      />
+      <TextRow label="Prompt" value={str(c, "promptText")} />
+      <TextRow label="Reflection" value={str(c, "textContent")} />
+      <AudioRow label="Audio" url={str(c, "audioUrl")} />
+      <ImageRow label="Drawing" url={str(c, "drawingUrl")} alt="Journal drawing" />
     </div>
   );
 }
@@ -163,7 +182,7 @@ function MessageContent({ c }: { c: Content }) {
           value={str(c, "createdAt") ? formatDate(str(c, "createdAt")) : null}
         />
       </Grid>
-      <Row label="Message" value={<LongText value={str(c, "content")} />} />
+      <TextRow label="Message" value={str(c, "content")} />
     </div>
   );
 }
@@ -191,7 +210,7 @@ function LumiriContent({ c }: { c: Content }) {
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             Session summary
           </p>
-          <Row label="Summary" value={<LongText value={str(summary, "summaryText")} />} />
+          <TextRow label="Summary" value={str(summary, "summaryText")} />
           <Grid>
             <Row label="Mood intensity" value={str(summary, "moodIntensity")} />
             <Row label="Mood signals" value={list(summary, "moodSignals").join(", ") || null} />
