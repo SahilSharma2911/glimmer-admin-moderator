@@ -1,9 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { MenuIcon, GridIcon, BellIcon, ChevronDownIcon } from "@/lib/icons";
+// BellIcon is unused while the notifications button is commented out below.
+import {
+  MenuIcon,
+  ChevronDownIcon,
+  SettingsIcon,
+  LogOutIcon,
+} from "@/lib/icons";
+import { roleHomePath } from "@/features/auth/roles";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { isNavItemActive, type NavItem } from "./types";
 
 function initialsOf(name?: string | null, email?: string | null): string {
@@ -25,7 +38,6 @@ export function Topbar({
   const router = useRouter();
   const pathname = usePathname();
   const { name, email, role, logout } = useCurrentUser();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const active = nav.find((i) => isNavItemActive(i, pathname));
   const display = name ?? email ?? "Account";
@@ -48,13 +60,13 @@ export function Topbar({
         >
           <MenuIcon size={20} />
         </button>
-        <div className="flex items-center gap-2 text-slate-700">
-          <GridIcon size={18} className="text-slate-400" />
+        <div className="flex items-center text-slate-700">
           <span className="text-sm font-medium">{active?.label ?? ""}</span>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
+        {/* Notifications — temporarily hidden until the feature is wired up.
         <button
           type="button"
           aria-label="Notifications"
@@ -65,12 +77,11 @@ export function Topbar({
             9
           </span>
         </button>
+        */}
 
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setMenuOpen((o) => !o)}
-            className="flex items-center gap-2 rounded-lg p-1 hover:bg-slate-50"
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className="group flex items-center gap-2 rounded-lg p-1 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand/15 text-sm font-semibold text-accent">
               {initialsOf(name, email)}
@@ -79,30 +90,34 @@ export function Topbar({
               <span className="block text-sm font-medium text-slate-800">{display}</span>
               <span className="block text-xs text-slate-400">{roleLabel}</span>
             </span>
-            <ChevronDownIcon size={16} className="text-slate-400" />
-          </button>
+            <ChevronDownIcon
+              size={16}
+              className="text-slate-400 transition-transform group-data-popup-open:rotate-180"
+            />
+          </DropdownMenuTrigger>
 
-          {menuOpen ? (
-            <>
-              <button
-                type="button"
-                aria-hidden
-                tabIndex={-1}
-                className="fixed inset-0 z-10 cursor-default"
-                onClick={() => setMenuOpen(false)}
-              />
-              <div className="absolute right-0 z-20 mt-2 w-44 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="block w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
-                >
-                  Log out
-                </button>
-              </div>
-            </>
-          ) : null}
-        </div>
+          <DropdownMenuContent align="end" sideOffset={8} className="w-56">
+            <div className="px-2 py-1.5">
+              <p className="truncate text-sm font-medium text-slate-800">{display}</p>
+              {email ? (
+                <p className="truncate text-xs text-slate-400">{email}</p>
+              ) : null}
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => router.push(`${roleHomePath(role)}/settings`)}
+              className="focus:bg-accent-soft focus:text-accent"
+            >
+              <SettingsIcon size={16} />
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive" onClick={handleLogout}>
+              <LogOutIcon size={16} />
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
