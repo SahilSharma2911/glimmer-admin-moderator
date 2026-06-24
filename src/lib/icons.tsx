@@ -176,6 +176,33 @@ export function ArrowRightIcon(props: IconProps) {
   );
 }
 
+export function UserIcon(props: IconProps) {
+  return (
+    <svg {...base(props)} stroke="currentColor" {...strokeProps}>
+      <circle cx="12" cy="8" r="3.2" />
+      <path d="M5.5 19a6.5 6.5 0 0 1 13 0" />
+    </svg>
+  );
+}
+
+export function LogOutIcon(props: IconProps) {
+  return (
+    <svg {...base(props)} stroke="currentColor" {...strokeProps}>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <path d="m16 17 5-5-5-5M21 12H9" />
+    </svg>
+  );
+}
+
+export function InfoIcon(props: IconProps) {
+  return (
+    <svg {...base(props)} stroke="currentColor" {...strokeProps}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11.5v4.5M12 8h.01" />
+    </svg>
+  );
+}
+
 export function DocumentIcon(props: IconProps) {
   return (
     <svg {...base(props)} stroke="currentColor" {...strokeProps}>
