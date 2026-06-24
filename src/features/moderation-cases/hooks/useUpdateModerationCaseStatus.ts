@@ -21,9 +21,11 @@ interface UpdateModerationCaseStatusVariables {
  * Invalid transitions (incl. re-applying the same status) return 409
  * `INVALID_TRANSITION`; use `nextStatuses(current)` to offer only valid targets.
  *
- * The PATCH returns the updated case scalars (no linked content), so on success
- * we merge them into the detail cache (preserving child/linked content) and
- * refresh the lists and stats (status counts shift).
+ * The PATCH returns the updated case scalars (no linked content). MARK_SAFE /
+ * REMOVE_CONTENT also mutate the underlying content (publish/delete), so we
+ * optimistically merge the new scalars for an instant status update and then
+ * refetch the detail (to pick up the changed linked content) along with the
+ * lists and stats (status counts shift).
  */
 export function useUpdateModerationCaseStatus() {
   const queryClient = useQueryClient();
@@ -40,6 +42,11 @@ export function useUpdateModerationCaseStatus() {
         moderationCaseKeys.detail(updated.id),
         (prev) => (prev ? { ...prev, ...updated } : prev),
       );
+      // Refetch the detail so the linked-content blocks reflect a
+      // publish/removal, plus the lists and stats whose counts shifted.
+      queryClient.invalidateQueries({
+        queryKey: moderationCaseKeys.detail(updated.id),
+      });
       queryClient.invalidateQueries({ queryKey: moderationCaseKeys.lists() });
       queryClient.invalidateQueries({ queryKey: moderationCaseKeys.stats() });
     },

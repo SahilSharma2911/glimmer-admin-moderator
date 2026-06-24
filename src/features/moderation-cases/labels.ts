@@ -12,11 +12,31 @@ import type {
  * `SELF_HARM_IN_AUDIO_CAPSULE` → "Self-harm in Audio Capsule").
  */
 
+/** State labels — what the case currently IS (badges, status field). */
 export const STATUS_LABELS: Record<ModerationCaseStatus, string> = {
   OPEN: "Open",
   IN_REVIEW: "In review",
   RESOLVED: "Resolved",
-  DISMISSED: "Dismissed",
+  MARK_SAFE: "Marked safe",
+  REMOVE_CONTENT: "Content removed",
+};
+
+/** Action labels — the verb for a transition (buttons, menu items). */
+export const STATUS_ACTION_LABELS: Record<ModerationCaseStatus, string> = {
+  OPEN: "Reopen",
+  IN_REVIEW: "Move to review",
+  RESOLVED: "Resolve",
+  MARK_SAFE: "Mark safe",
+  REMOVE_CONTENT: "Remove content",
+};
+
+/** Result-oriented confirmation messages shown after a successful action. */
+export const STATUS_SUCCESS_LABELS: Record<ModerationCaseStatus, string> = {
+  OPEN: "Case reopened.",
+  IN_REVIEW: "Case moved to review.",
+  RESOLVED: "Case resolved.",
+  MARK_SAFE: "Content marked safe.",
+  REMOVE_CONTENT: "Content removed.",
 };
 
 export const SOURCE_LABELS: Record<ModerationCaseSource, string> = {

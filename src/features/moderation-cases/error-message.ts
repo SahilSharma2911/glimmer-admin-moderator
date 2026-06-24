@@ -7,6 +7,8 @@ export function moderationCaseErrorMessage(error: ApiError | null): string {
       return "This case no longer exists. Refresh and try again.";
     case "INVALID_TRANSITION":
       return "That status change isn't allowed from the current status.";
+    case "CONTENT_NOT_ACTIONABLE":
+      return "This case has no content to act on (e.g. a Lumiri chat or report), so it can't be marked safe or removed.";
     case "FORBIDDEN":
       return "Only moderators can change a case status.";
     case "VALIDATION_ERROR":

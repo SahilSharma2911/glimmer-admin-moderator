@@ -13,10 +13,10 @@ import {
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { CaseStatusDialog } from "./CaseStatusDialog";
 import { useCaseStatusAction } from "./useCaseStatusAction";
-import { STATUS_LABELS } from "../labels";
+import { STATUS_ACTION_LABELS } from "../labels";
 import {
+  availableTransitions,
   canEditCaseStatus,
-  nextStatuses,
 } from "../types/moderation-cases.types";
 import { STATUS_ICONS } from "./status-icons";
 import type { ModerationCaseListItem } from "../types/moderation-cases.types";
@@ -43,7 +43,7 @@ export function CellAction({ data }: { data: ModerationCaseListItem }) {
   const { target, setTarget, reviewNote, setReviewNote, isUpdating, onConfirm, close } =
     useCaseStatusAction(data);
 
-  const transitions = canEditCaseStatus(role) ? nextStatuses(data.status) : [];
+  const transitions = canEditCaseStatus(role) ? availableTransitions(data) : [];
 
   return (
     <div className="flex justify-end">
@@ -76,11 +76,11 @@ export function CellAction({ data }: { data: ModerationCaseListItem }) {
               <DropdownMenuItem
                 key={status}
                 className={ITEM_HOVER}
-                variant={status === "DISMISSED" ? "destructive" : undefined}
+                variant={status === "REMOVE_CONTENT" ? "destructive" : undefined}
                 onClick={() => setTarget(status)}
               >
                 <Icon />
-                Mark {STATUS_LABELS[status].toLowerCase()}
+                {STATUS_ACTION_LABELS[status]}
               </DropdownMenuItem>
             );
           })}
