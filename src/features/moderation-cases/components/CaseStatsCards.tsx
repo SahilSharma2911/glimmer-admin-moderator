@@ -19,10 +19,19 @@ function criticalCount(stats: ModerationCaseStats | undefined): number {
   return CRITICAL_FLAGS.reduce((sum, f) => sum + (stats.byFlag[f] ?? 0), 0);
 }
 
+/** Terminal outcomes — a case is "closed" once it reaches any of these. */
+const CLOSED_STATUSES = ["RESOLVED", "MARK_SAFE", "REMOVE_CONTENT"] as const;
+
+function closedCount(stats: ModerationCaseStats | undefined): number | undefined {
+  if (!stats) return undefined;
+  return CLOSED_STATUSES.reduce((sum, s) => sum + (stats.byStatus[s] ?? 0), 0);
+}
+
 /**
  * Dashboard stat cards driven by GET /api/admin/moderation-cases/stats.
  * Open / In review counts come from `byStatus`; the critical card sums the
- * S3/S5/S8 flags (matching the backend's critical-cases definition).
+ * S3/S5/S8 flags (matching the backend's critical-cases definition); the
+ * closed card sums the terminal statuses (resolved + marked safe + removed).
  */
 export function CaseStatsCards() {
   const { data, isLoading, isError, refetch } = useModerationCaseStats();
@@ -49,8 +58,8 @@ export function CaseStatsCards() {
       danger: true,
     },
     {
-      label: "Resolved",
-      value: data?.byStatus.RESOLVED,
+      label: "Closed",
+      value: closedCount(data),
       icon: CheckCircleIcon,
     },
   ];

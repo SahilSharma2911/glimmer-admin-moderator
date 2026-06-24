@@ -18,11 +18,11 @@ import {
   CASE_TYPE_LABELS,
   DECISION_LABELS,
   SOURCE_LABELS,
-  STATUS_LABELS,
+  STATUS_ACTION_LABELS,
 } from "./labels";
 import {
+  availableTransitions,
   canEditCaseStatus,
-  nextStatuses,
 } from "./types/moderation-cases.types";
 import type { ModerationCaseDetail } from "./types/moderation-cases.types";
 
@@ -41,26 +41,28 @@ function Field({ label, value }: { label: string; value: React.ReactNode }) {
 function ReviewActions({ data }: { data: ModerationCaseDetail }) {
   const { target, setTarget, reviewNote, setReviewNote, isUpdating, onConfirm, close } =
     useCaseStatusAction(data);
-  const transitions = nextStatuses(data.status);
+  const transitions = availableTransitions(data);
 
   return (
     <>
       <div className="flex flex-wrap gap-2">
         {transitions.map((status) => {
           const Icon = STATUS_ICONS[status];
+          const destructive = status === "REMOVE_CONTENT";
+          const primary = status === "MARK_SAFE";
           return (
             <Button
               key={status}
-              variant={status === "DISMISSED" ? "outline" : "brand"}
+              variant={destructive || !primary ? "outline" : "brand"}
               className={
-                status === "DISMISSED"
+                destructive
                   ? "border-rose-200 text-rose-600 hover:bg-rose-50"
                   : undefined
               }
               onClick={() => setTarget(status)}
             >
               <Icon size={16} />
-              Mark {STATUS_LABELS[status].toLowerCase()}
+              {STATUS_ACTION_LABELS[status]}
             </Button>
           );
         })}

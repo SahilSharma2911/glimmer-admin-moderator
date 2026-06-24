@@ -26,14 +26,20 @@ export type ModerationCaseSource =
   | "USER_REPORT";
 
 /**
- * Review lifecycle. New cases start `OPEN`. Terminal states
- * (`RESOLVED` / `DISMISSED`) are reopenable to `IN_REVIEW`.
+ * Review lifecycle. New cases start `OPEN`.
+ *   - `RESOLVED`       — closed with no content action (reopenable to IN_REVIEW)
+ *   - `MARK_SAFE`      — content cleared: capsule published / journal made visible
+ *   - `REMOVE_CONTENT` — content taken down: capsule/journal/message deleted (terminal)
+ *
+ * `MARK_SAFE` / `REMOVE_CONTENT` act on the case's linked content, so they
+ * require the case to reference a capsule, journal, or message.
  */
 export type ModerationCaseStatus =
   | "OPEN"
   | "IN_REVIEW"
   | "RESOLVED"
-  | "DISMISSED";
+  | "MARK_SAFE"
+  | "REMOVE_CONTENT";
 
 /**
  * S-code recognition/severity key. Null for user reports / UNCLASSIFIED cases.
@@ -237,18 +243,21 @@ export interface UpdateModerationCaseStatusRequest {
 // ---------------------------------------------------------------------------
 
 /**
- * Allowed status transitions. Re-applying the same status is rejected by the
- * backend as a no-op (409 INVALID_TRANSITION). Terminal states are reopenable
- * to IN_REVIEW so genuine mistakes can be recovered.
+ * Allowed status transitions (mirror of the backend). Re-applying the same
+ * status is rejected as a no-op (409 INVALID_TRANSITION). RESOLVED and
+ * MARK_SAFE are reopenable to IN_REVIEW; REMOVE_CONTENT is terminal (the
+ * content is gone — nothing to reopen to). MARK_SAFE can still escalate to
+ * REMOVE_CONTENT.
  */
 export const ALLOWED_STATUS_TRANSITIONS: Record<
   ModerationCaseStatus,
   ModerationCaseStatus[]
 > = {
-  OPEN: ["IN_REVIEW", "RESOLVED", "DISMISSED"],
-  IN_REVIEW: ["OPEN", "RESOLVED", "DISMISSED"],
+  OPEN: ["IN_REVIEW", "RESOLVED", "MARK_SAFE", "REMOVE_CONTENT"],
+  IN_REVIEW: ["OPEN", "RESOLVED", "MARK_SAFE", "REMOVE_CONTENT"],
   RESOLVED: ["IN_REVIEW"],
-  DISMISSED: ["IN_REVIEW"],
+  MARK_SAFE: ["IN_REVIEW", "REMOVE_CONTENT"],
+  REMOVE_CONTENT: [],
 };
 
 /** Status values a MODERATOR may move a case to from its current status. */
@@ -256,6 +265,39 @@ export function nextStatuses(
   current: ModerationCaseStatus,
 ): ModerationCaseStatus[] {
   return ALLOWED_STATUS_TRANSITIONS[current];
+}
+
+/**
+ * Statuses whose backend side-effect acts on the case's linked content
+ * (vs. OPEN/IN_REVIEW/RESOLVED which are review-tracking only).
+ */
+export function isContentActionStatus(status: ModerationCaseStatus): boolean {
+  return status === "MARK_SAFE" || status === "REMOVE_CONTENT";
+}
+
+/**
+ * Whether a case references content that MARK_SAFE / REMOVE_CONTENT can act on
+ * (a capsule, journal, or message). Lumiri- and report-only cases have nothing
+ * to act on — the backend rejects those with 409 CONTENT_NOT_ACTIONABLE.
+ */
+export function hasActionableContent(
+  c: Pick<ModerationCase, "capsuleId" | "journalId" | "messageId">,
+): boolean {
+  return Boolean(c.capsuleId || c.journalId || c.messageId);
+}
+
+/**
+ * Status targets a MODERATOR may move this case to, with content actions
+ * (MARK_SAFE / REMOVE_CONTENT) filtered out when the case has no actionable
+ * content. Drive the decision UI from this rather than `nextStatuses` so the
+ * UI never offers an action the backend will reject.
+ */
+export function availableTransitions(
+  c: Pick<ModerationCase, "status" | "capsuleId" | "journalId" | "messageId">,
+): ModerationCaseStatus[] {
+  return nextStatuses(c.status).filter(
+    (status) => !isContentActionStatus(status) || hasActionableContent(c),
+  );
 }
 
 /**

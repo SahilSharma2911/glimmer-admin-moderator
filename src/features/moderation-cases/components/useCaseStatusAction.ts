@@ -4,7 +4,7 @@ import * as React from "react";
 import { toast } from "sonner";
 import { useUpdateModerationCaseStatus } from "../hooks/useUpdateModerationCaseStatus";
 import { moderationCaseErrorMessage } from "../error-message";
-import { STATUS_LABELS } from "../labels";
+import { STATUS_SUCCESS_LABELS } from "../labels";
 import type {
   ModerationCase,
   ModerationCaseStatus,
@@ -41,7 +41,7 @@ export function useCaseStatusAction(moderationCase: Pick<ModerationCase, "id">) 
       },
       {
         onSuccess: () => {
-          toast.success(`Case marked ${STATUS_LABELS[target].toLowerCase()}.`);
+          toast.success(STATUS_SUCCESS_LABELS[target]);
           close();
         },
         onError: (error) => toast.error(moderationCaseErrorMessage(error)),
