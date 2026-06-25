@@ -170,6 +170,18 @@ export interface ModerationCaseReviewer {
 }
 
 /**
+ * The subject child's guardian contact. Exposed ONLY on S5 self-harm case
+ * detail (escalation-critical — a moderator may need to reach the parent
+ * directly); `null` on every other case type. Never present on list rows.
+ */
+export interface ModerationCaseParent {
+  id: string;
+  fullName: string | null;
+  email: string;
+  phone: string | null;
+}
+
+/**
  * Linked content blocks. Exactly one is non-null per case, matching the
  * `caseType` surface. Loosely typed (`Record`) for the raw content payloads —
  * the detail UI renders these per surface; tighten as views are built. Journal
@@ -182,6 +194,8 @@ export interface ModerationCaseDetail extends ModerationCase {
   message: Record<string, unknown> | null;
   lumiriSession: Record<string, unknown> | null;
   reviewedBy: ModerationCaseReviewer | null;
+  /** Guardian contact — present only on S5 self-harm cases (else null). */
+  parent: ModerationCaseParent | null;
 }
 
 // ---------------------------------------------------------------------------

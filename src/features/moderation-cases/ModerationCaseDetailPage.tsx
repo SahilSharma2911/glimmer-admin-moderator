@@ -11,6 +11,7 @@ import { useModerationCase } from "./hooks/useModerationCase";
 import { CaseStatusBadge } from "./components/CaseStatusBadge";
 import { CaseFlagBadge } from "./components/CaseFlagBadge";
 import { CaseContent } from "./components/CaseContent";
+import { ParentContactCard } from "./components/ParentContactCard";
 import { CaseStatusDialog } from "./components/CaseStatusDialog";
 import { STATUS_ICONS } from "./components/status-icons";
 import { useCaseStatusAction } from "./components/useCaseStatusAction";
@@ -157,7 +158,12 @@ export function ModerationCaseDetailPage({
       ) : isError || !data ? (
         <ErrorState onRetry={() => refetch()} />
       ) : (
-        <>
+        <div
+          className={
+            data.parent ? "grid grid-cols-1 gap-6 xl:grid-cols-3" : "space-y-6"
+          }
+        >
+          <div className={data.parent ? "space-y-6 xl:col-span-2" : "space-y-6"}>
           <section className="rounded-xl border border-slate-200 bg-white p-6">
             <h2 className="text-sm font-semibold text-slate-900">Case</h2>
             <div className="mt-5 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -226,7 +232,16 @@ export function ModerationCaseDetailPage({
               </div>
             )}
           </section>
-        </>
+          </div>
+
+          {data.parent && (
+            <aside className="xl:col-span-1">
+              <div className="xl:sticky xl:top-6">
+                <ParentContactCard parent={data.parent} />
+              </div>
+            </aside>
+          )}
+        </div>
       )}
     </div>
   );
