@@ -236,9 +236,7 @@ export function ModerationCaseDetailPage({
 
           {data.parent && (
             <aside className="xl:col-span-1">
-              <div className="xl:sticky xl:top-6">
-                <ParentContactCard parent={data.parent} />
-              </div>
+              <ParentContactCard parent={data.parent} />
             </aside>
           )}
         </div>
