@@ -15,7 +15,7 @@ export const moderatorKeys = {
 };
 
 /**
- * List moderators (GET /api/admin/moderators) with server-side pagination and
+ * List moderators (GET /admin/moderators) with server-side pagination and
  * search. Disabled when there's no token so it doesn't fire a guaranteed 401.
  * Previous page data is kept while the next page loads to avoid layout jumps.
  */

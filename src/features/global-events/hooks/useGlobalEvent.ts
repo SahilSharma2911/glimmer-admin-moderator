@@ -4,7 +4,7 @@ import { globalEventKeys } from "./useGlobalEvents";
 import { tokenStore } from "@/lib/api/token";
 
 /**
- * Get a single global event (GET /api/admin/global-events/{eventId}).
+ * Get a single global event (GET /admin/global-events/{eventId}).
  * Disabled without a token or an id (e.g. before a row is selected). The
  * derived `status` / `totalJoined` are recomputed by the backend on each read.
  */

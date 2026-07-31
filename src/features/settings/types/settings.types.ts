@@ -1,4 +1,4 @@
-// POST /api/admin/auth/password/change
+// POST /admin/auth/password/change
 export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;

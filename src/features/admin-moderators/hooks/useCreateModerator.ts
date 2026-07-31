@@ -8,7 +8,7 @@ import type {
 } from "../types/moderators.types";
 
 /**
- * Invite a moderator (POST /api/admin/moderators). On success the backend
+ * Invite a moderator (POST /admin/moderators). On success the backend
  * emails a signed onboarding link; we refresh the list. Consumers handle
  * toasts via mutate's onSuccess/onError.
  */

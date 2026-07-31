@@ -8,7 +8,7 @@ import type {
 } from "../types/global-events.types";
 
 /**
- * Create a global event (POST /api/admin/global-events). ADMIN only — a
+ * Create a global event (POST /admin/global-events). ADMIN only — a
  * MODERATOR receives a 403. On success we seed the detail cache and refresh
  * the lists.
  */

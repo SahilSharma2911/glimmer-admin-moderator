@@ -1,5 +1,5 @@
 /**
- * Types for the admin Global Events API (`/api/admin/global-events/*`).
+ * Types for the admin Global Events API (`/admin/global-events/*`).
  *
  * A global event is a scheduled "moment of care" every child can join in
  * realtime. Admins own the CRUD here; children join over sockets (out of scope
@@ -51,13 +51,13 @@ export interface Pagination {
   totalPages: number;
 }
 
-/** GET /api/admin/global-events response payload. */
+/** GET /admin/global-events response payload. */
 export interface GlobalEventListPage {
   events: GlobalEventSummary[];
   pagination: Pagination;
 }
 
-/** GET /api/admin/global-events — query params (all optional). */
+/** GET /admin/global-events — query params (all optional). */
 export interface ListGlobalEventsQuery {
   /** Filter by derived status (translated to a `scheduledAt` range server-side). */
   status?: EventStatus;
@@ -70,7 +70,7 @@ export interface ListGlobalEventsQuery {
 }
 
 /**
- * POST /api/admin/global-events. `scheduledAt` is an ISO datetime string
+ * POST /admin/global-events. `scheduledAt` is an ISO datetime string
  * (the backend coerces it to a Date).
  */
 export interface CreateGlobalEventRequest {
@@ -83,13 +83,13 @@ export interface CreateGlobalEventRequest {
 }
 
 /**
- * PATCH /api/admin/global-events/{eventId}. All fields optional. Only events
+ * PATCH /admin/global-events/{eventId}. All fields optional. Only events
  * still UPCOMING are editable; the backend returns 409 EVENT_NOT_EDITABLE once
  * an event has gone live or ended.
  */
 export type UpdateGlobalEventRequest = Partial<CreateGlobalEventRequest>;
 
-/** DELETE /api/admin/global-events/{eventId} response payload. */
+/** DELETE /admin/global-events/{eventId} response payload. */
 export interface DeleteGlobalEventResult {
   deleted: boolean;
 }

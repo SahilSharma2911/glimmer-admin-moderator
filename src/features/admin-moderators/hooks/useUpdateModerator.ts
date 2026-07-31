@@ -14,7 +14,7 @@ interface UpdateModeratorVariables {
 
 /**
  * Rename / suspend / reactivate a moderator
- * (PATCH /api/admin/moderators/{moderatorId}). On success we seed the detail
+ * (PATCH /admin/moderators/{moderatorId}). On success we seed the detail
  * cache with the returned moderator and refresh the list.
  */
 export function useUpdateModerator() {

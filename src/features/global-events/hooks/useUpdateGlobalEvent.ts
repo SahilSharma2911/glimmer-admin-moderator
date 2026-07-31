@@ -13,7 +13,7 @@ interface UpdateGlobalEventVariables {
 }
 
 /**
- * Update a global event (PATCH /api/admin/global-events/{eventId}). ADMIN only,
+ * Update a global event (PATCH /admin/global-events/{eventId}). ADMIN only,
  * and only while the event is UPCOMING — otherwise the backend returns 409
  * EVENT_NOT_EDITABLE. On success we seed the detail cache and refresh the lists.
  */

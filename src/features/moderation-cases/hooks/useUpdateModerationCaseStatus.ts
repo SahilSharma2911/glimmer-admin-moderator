@@ -14,7 +14,7 @@ interface UpdateModerationCaseStatusVariables {
 }
 
 /**
- * Change a case status (PATCH /api/admin/moderation-cases/{caseId}).
+ * Change a case status (PATCH /admin/moderation-cases/{caseId}).
  *
  * MODERATOR-only — ADMIN receives a 403 (`ApiError.status === 403`). Gate the
  * triggering UI on `canEditCaseStatus(role)` / `useCurrentUser().isModerator`.

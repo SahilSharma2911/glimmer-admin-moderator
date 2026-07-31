@@ -7,13 +7,13 @@ export interface AuthResult {
   role: AdminRole;
 }
 
-// POST /api/admin/auth/login
+// POST /admin/auth/login
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
-// POST /api/admin/auth/password/forgot
+// POST /admin/auth/password/forgot
 export interface ForgotPasswordRequest {
   email: string;
 }
@@ -22,7 +22,7 @@ export interface ForgotPasswordResult {
   resendAvailableInSeconds: number;
 }
 
-// POST /api/admin/auth/password/verify-otp
+// POST /admin/auth/password/verify-otp
 export interface VerifyOtpRequest {
   email: string;
   otp: string;
@@ -32,7 +32,7 @@ export interface VerifyOtpResult {
   expiresInSeconds: number;
 }
 
-// POST /api/admin/auth/password/reset
+// POST /admin/auth/password/reset
 export interface ResetPasswordRequest {
   resetToken: string;
   newPassword: string;
@@ -42,14 +42,14 @@ export interface ResetPasswordResult {
   message: string;
 }
 
-// POST /api/admin/auth/onboard (moderator first-time password via invite)
+// POST /admin/auth/onboard (moderator first-time password via invite)
 export interface OnboardRequest {
   token: string;
   password: string;
   confirmPassword: string;
 }
 
-// GET /api/admin/auth/me
+// GET /admin/auth/me
 export interface AdminProfile {
   adminId: string;
   email: string;

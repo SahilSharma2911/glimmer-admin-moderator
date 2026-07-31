@@ -5,7 +5,7 @@ import { tokenStore } from "@/lib/api/token";
 
 /**
  * Get a single moderation case with its linked content
- * (GET /api/admin/moderation-cases/{caseId}). Available to both ADMIN and
+ * (GET /admin/moderation-cases/{caseId}). Available to both ADMIN and
  * MODERATOR. Opening a case is audited server-side (it exposes a child's
  * private content). Disabled without a token or a caseId.
  */

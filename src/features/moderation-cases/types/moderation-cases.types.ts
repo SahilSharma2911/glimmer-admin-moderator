@@ -1,6 +1,6 @@
 /**
  * Types for the centralized moderation review queue
- * (`/api/admin/moderation-cases/*`).
+ * (`/admin/moderation-cases/*`).
  *
  * A case is created (forward-only) whenever AI moderation flags/blocks content
  * (capsule, journal, Lumiri chat) or a user reports content (capsule/message).
@@ -150,7 +150,7 @@ export interface ModerationCaseChildRef {
   username: string;
 }
 
-/** A row in the list response (GET /api/admin/moderation-cases). */
+/** A row in the list response (GET /admin/moderation-cases). */
 export interface ModerationCaseListItem extends ModerationCase {
   child: ModerationCaseChildRef;
 }
@@ -202,7 +202,7 @@ export interface ModerationCaseDetail extends ModerationCase {
 // Requests / responses
 // ---------------------------------------------------------------------------
 
-/** GET /api/admin/moderation-cases — query params (all optional). */
+/** GET /admin/moderation-cases — query params (all optional). */
 export interface ListModerationCasesQuery {
   status?: ModerationCaseStatus;
   caseType?: ModerationCaseType;
@@ -226,13 +226,13 @@ export interface Pagination {
   totalPages: number;
 }
 
-/** GET /api/admin/moderation-cases response payload. */
+/** GET /admin/moderation-cases response payload. */
 export interface ModerationCaseListResult {
   cases: ModerationCaseListItem[];
   pagination: Pagination;
 }
 
-/** GET /api/admin/moderation-cases/stats response payload (dashboard cards). */
+/** GET /admin/moderation-cases/stats response payload (dashboard cards). */
 export interface ModerationCaseStats {
   total: number;
   /** Every status is seeded at 0, so all cards are always present. */
@@ -244,7 +244,7 @@ export interface ModerationCaseStats {
 }
 
 /**
- * PATCH /api/admin/moderation-cases/{caseId} — change a case status
+ * PATCH /admin/moderation-cases/{caseId} — change a case status
  * (MODERATOR only). `reviewNote` is an optional free-text note (≤2000 chars).
  */
 export interface UpdateModerationCaseStatusRequest {

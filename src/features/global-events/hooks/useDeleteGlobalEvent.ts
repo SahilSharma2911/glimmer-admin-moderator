@@ -5,7 +5,7 @@ import type { ApiError } from "@/lib/api/types";
 import type { DeleteGlobalEventResult } from "../types/global-events.types";
 
 /**
- * Delete a global event (DELETE /api/admin/global-events/{eventId}). ADMIN only,
+ * Delete a global event (DELETE /admin/global-events/{eventId}). ADMIN only,
  * and only while the event is UPCOMING — otherwise the backend returns 409
  * EVENT_NOT_DELETABLE. On success we drop the detail cache and refresh the lists.
  */

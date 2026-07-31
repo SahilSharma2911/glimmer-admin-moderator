@@ -9,11 +9,11 @@ import type {
  * `{ success, data }` envelope is handled by apiRequest).
  */
 export const settingsApi = {
-  // POST /api/admin/auth/password/change (authenticated)
+  // POST /admin/auth/password/change (authenticated)
   changePassword: (body: ChangePasswordRequest) =>
     apiRequest<ChangePasswordResult>({
       method: "POST",
-      url: "/api/admin/auth/password/change",
+      url: "/admin/auth/password/change",
       data: body,
     }),
 };

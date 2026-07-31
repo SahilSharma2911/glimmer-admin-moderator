@@ -28,7 +28,7 @@ function closedCount(stats: ModerationCaseStats | undefined): number | undefined
 }
 
 /**
- * Dashboard stat cards driven by GET /api/admin/moderation-cases/stats.
+ * Dashboard stat cards driven by GET /admin/moderation-cases/stats.
  * Open / In review counts come from `byStatus`; the critical card sums the
  * S3/S5/S8 flags (matching the backend's critical-cases definition); the
  * closed card sums the terminal statuses (resolved + marked safe + removed).

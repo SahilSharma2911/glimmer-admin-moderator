@@ -16,7 +16,7 @@ export const moderationCaseKeys = {
 };
 
 /**
- * List moderation cases (GET /api/admin/moderation-cases) with server-side
+ * List moderation cases (GET /admin/moderation-cases) with server-side
  * pagination, filtering, and search. Available to both ADMIN and MODERATOR.
  * Disabled when there's no token so it doesn't fire a guaranteed 401. Previous
  * page data is kept while the next page loads to avoid layout jumps.

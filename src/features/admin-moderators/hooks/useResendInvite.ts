@@ -6,7 +6,7 @@ import type { Moderator } from "../types/moderators.types";
 
 /**
  * Resend a moderator's invite email
- * (POST /api/admin/moderators/{moderatorId}/resend-invite). Only valid for
+ * (POST /admin/moderators/{moderatorId}/resend-invite). Only valid for
  * PENDING moderators — the backend 409s (`MODERATOR_ALREADY_ONBOARDED`)
  * otherwise. Seeds the returned moderator into the detail cache.
  */

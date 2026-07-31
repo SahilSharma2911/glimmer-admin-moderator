@@ -2,7 +2,7 @@ import type { AdminRole } from "@/features/auth/types/auth.types";
 
 /**
  * Types for the admin-only moderator management API
- * (`/api/admin/moderators/*`). All routes require the ADMIN role.
+ * (`/admin/moderators/*`). All routes require the ADMIN role.
  *
  * The list endpoint is paginated and searchable server-side (ordered by
  * `createdAt` desc). `search` matches name OR email, case-insensitive; there
@@ -34,7 +34,7 @@ export interface Moderator {
   updatedAt: string;
 }
 
-// GET /api/admin/moderators — query params.
+// GET /admin/moderators — query params.
 export interface ListModeratorsQuery {
   /** 1-based page number (default 1). */
   page?: number;
@@ -52,13 +52,13 @@ export interface Pagination {
   totalPages: number;
 }
 
-/** GET /api/admin/moderators response payload. */
+/** GET /admin/moderators response payload. */
 export interface ModeratorListResult {
   moderators: Moderator[];
   pagination: Pagination;
 }
 
-// POST /api/admin/moderators — invite a moderator by name + email.
+// POST /admin/moderators — invite a moderator by name + email.
 export interface CreateModeratorRequest {
   /** 1–120 chars (backend trims). */
   name: string;
@@ -67,7 +67,7 @@ export interface CreateModeratorRequest {
 }
 
 /**
- * PATCH /api/admin/moderators/{moderatorId} — rename / suspend / reactivate.
+ * PATCH /admin/moderators/{moderatorId} — rename / suspend / reactivate.
  * At least one field is required. `status` only toggles ACTIVE ↔ SUSPENDED;
  * PENDING is system-managed and rejected.
  */

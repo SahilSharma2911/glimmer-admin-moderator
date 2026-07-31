@@ -13,7 +13,7 @@ const RECENT_LIMIT = 6;
 
 /**
  * "Recent case activity" panel — the latest cases from
- * GET /api/admin/moderation-cases (ordered newest-first by the backend).
+ * GET /admin/moderation-cases (ordered newest-first by the backend).
  * Links resolve under the current section via `basePath`.
  */
 export function RecentCaseActivity({

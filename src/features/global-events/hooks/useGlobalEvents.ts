@@ -18,7 +18,7 @@ export const globalEventKeys = {
 };
 
 /**
- * List global events (GET /api/admin/global-events) with server-side
+ * List global events (GET /admin/global-events) with server-side
  * pagination, status filtering, and name search. Disabled without a token so
  * it doesn't fire a guaranteed 401. Previous page data is kept while the next
  * page loads to avoid layout jumps.

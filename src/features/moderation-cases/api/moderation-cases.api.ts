@@ -9,7 +9,7 @@ import type {
 } from "../types/moderation-cases.types";
 
 /**
- * Centralized moderation review queue endpoints (`/api/admin/moderation-cases`).
+ * Centralized moderation review queue endpoints (`/admin/moderation-cases`).
  *
  * Reads (`stats`, `list`, `get`) are available to both ADMIN and MODERATOR.
  * `updateStatus` (PATCH) is MODERATOR-only — the backend returns 403 for ADMIN.
@@ -20,33 +20,33 @@ import type {
  * key so callers get a plain case object.
  */
 export const moderationCasesApi = {
-  // GET /api/admin/moderation-cases/stats
+  // GET /admin/moderation-cases/stats
   stats: () =>
     apiRequest<ModerationCaseStats>({
       method: "GET",
-      url: "/api/admin/moderation-cases/stats",
+      url: "/admin/moderation-cases/stats",
     }),
 
-  // GET /api/admin/moderation-cases?status&caseType&flag&source&childId&search&page&limit
+  // GET /admin/moderation-cases?status&caseType&flag&source&childId&search&page&limit
   list: (query: ListModerationCasesQuery = {}) =>
     apiRequest<ModerationCaseListResult>({
       method: "GET",
-      url: "/api/admin/moderation-cases",
+      url: "/admin/moderation-cases",
       params: query,
     }),
 
-  // GET /api/admin/moderation-cases/{caseId}
+  // GET /admin/moderation-cases/{caseId}
   get: (caseId: string) =>
     apiRequest<{ case: ModerationCaseDetail }>({
       method: "GET",
-      url: `/api/admin/moderation-cases/${caseId}`,
+      url: `/admin/moderation-cases/${caseId}`,
     }).then((data) => data.case),
 
-  // PATCH /api/admin/moderation-cases/{caseId} (MODERATOR only)
+  // PATCH /admin/moderation-cases/{caseId} (MODERATOR only)
   updateStatus: (caseId: string, body: UpdateModerationCaseStatusRequest) =>
     apiRequest<{ case: ModerationCase }>({
       method: "PATCH",
-      url: `/api/admin/moderation-cases/${caseId}`,
+      url: `/admin/moderation-cases/${caseId}`,
       data: body,
     }).then((data) => data.case),
 };

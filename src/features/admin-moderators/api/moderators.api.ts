@@ -16,41 +16,41 @@ import type {
  * callers get a plain `Moderator`.
  */
 export const moderatorsApi = {
-  // GET /api/admin/moderators?page&limit&search
+  // GET /admin/moderators?page&limit&search
   list: (query: ListModeratorsQuery = {}) =>
     apiRequest<ModeratorListResult>({
       method: "GET",
-      url: "/api/admin/moderators",
+      url: "/admin/moderators",
       params: query,
     }),
 
-  // GET /api/admin/moderators/{moderatorId}
+  // GET /admin/moderators/{moderatorId}
   get: (moderatorId: string) =>
     apiRequest<{ moderator: Moderator }>({
       method: "GET",
-      url: `/api/admin/moderators/${moderatorId}`,
+      url: `/admin/moderators/${moderatorId}`,
     }).then((data) => data.moderator),
 
-  // POST /api/admin/moderators
+  // POST /admin/moderators
   create: (body: CreateModeratorRequest) =>
     apiRequest<{ moderator: Moderator }>({
       method: "POST",
-      url: "/api/admin/moderators",
+      url: "/admin/moderators",
       data: body,
     }).then((data) => data.moderator),
 
-  // PATCH /api/admin/moderators/{moderatorId}
+  // PATCH /admin/moderators/{moderatorId}
   update: (moderatorId: string, body: UpdateModeratorRequest) =>
     apiRequest<{ moderator: Moderator }>({
       method: "PATCH",
-      url: `/api/admin/moderators/${moderatorId}`,
+      url: `/admin/moderators/${moderatorId}`,
       data: body,
     }).then((data) => data.moderator),
 
-  // POST /api/admin/moderators/{moderatorId}/resend-invite
+  // POST /admin/moderators/{moderatorId}/resend-invite
   resendInvite: (moderatorId: string) =>
     apiRequest<{ moderator: Moderator }>({
       method: "POST",
-      url: `/api/admin/moderators/${moderatorId}/resend-invite`,
+      url: `/admin/moderators/${moderatorId}/resend-invite`,
     }).then((data) => data.moderator),
 };

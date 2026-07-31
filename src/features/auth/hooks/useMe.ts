@@ -7,7 +7,7 @@ export const authKeys = {
 };
 
 /**
- * Current authenticated admin (GET /api/admin/auth/me).
+ * Current authenticated admin (GET /admin/auth/me).
  * Disabled when there's no token so it doesn't fire a guaranteed 401.
  */
 export function useMe() {
